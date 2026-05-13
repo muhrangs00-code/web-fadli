@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAZ Gym & Billiard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #8B6914;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --white: #F5F0E8;
+    --white2: #E8E0D0;
+    --gray: #888888;
+    --red: #C0392B;
+    --green: #1A6B3A;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0));
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: rgba(10,10,10,0.97); border-bottom: 1px solid rgba(201,168,76,0.15); }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--gold); letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+  .nav-links a {
+    color: var(--white2); text-decoration: none;
+    font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
+    font-weight: 500; transition: color 0.3s; cursor: pointer;
+    position: relative; padding-bottom: 4px;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: var(--gold); transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-links a.active { color: var(--gold); }
+  .nav-links a.active::after { transform: scaleX(1); }
+  .btn-book-nav {
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold); padding: 0.5rem 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .btn-book-nav:hover { background: var(--gold); color: var(--black); }
+
+  /* PAGES */
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ===== HOME PAGE ===== */
+  #page-home {}
+
+  .hero-split {
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: 100vh; padding-top: 0;
+  }
+  .hero-panel {
+    position: relative; overflow: hidden;
+    display: flex; align-items: flex-end;
+    min-height: 100vh; cursor: pointer;
+  }
+  .hero-panel::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(0,0,0,0.55); z-index: 1;
+    transition: background 0.5s;
+  }
+  .hero-panel:hover::before { background: rgba(0,0,0,0.35); }
+  .hero-panel-gym {
+    background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1200&q=80');
+    background-size: cover; background-position: center top;
+  }
+  .hero-panel-billiard {
+    background-image: url('https://images.unsplash.com/photo-1615213612138-4d1195b1c0e4?w=1200&q=80');
+    background-size: cover; background-position: center;
+  }
+  .hero-panel-content {
+    position: relative; z-index: 2;
+    padding: 3rem 3.5rem; width: 100%;
+    border-top: 1px solid rgba(201,168,76,0.3);
+  }
+  .hero-panel-label {
+    font-size: 0.6rem; letter-spacing: 5px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 0.8rem;
+  }
+  .hero-panel-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300; line-height: 1.1;
+    color: var(--white); margin-bottom: 1.2rem;
+  }
+  .hero-panel-desc {
+    font-size: 0.75rem; color: rgba(245,240,232,0.7);
+    letter-spacing: 1px; line-height: 1.7; margin-bottom: 1.8rem;
+    max-width: 300px;
+  }
+  .btn-enter {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold); padding: 0.7rem 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.4s;
+    text-decoration: none;
+  }
+  .btn-enter:hover { background: var(--gold); color: var(--black); }
+  .btn-enter svg { width: 14px; height: 14px; }
+
+  .hero-center-divider {
+    position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 1px; background: rgba(201,168,76,0.4); z-index: 10;
+    transform: translateX(-50%);
+  }
+  .hero-center-logo {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20; text-align: center;
+  }
+  .hero-center-logo-inner {
+    background: var(--black);
+    border: 1px solid rgba(201,168,76,0.5);
+    padding: 1.5rem 2rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  }
+  .hero-center-logo-inner .main-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; font-weight: 700;
+    color: var(--gold); letter-spacing: 4px;
+  }
+  .hero-center-logo-inner .sub-title {
+    font-size: 0.55rem; letter-spacing: 5px;
+    color: var(--white2); text-transform: uppercase;
+  }
+  .hero-center-logo-inner .divider-line {
+    width: 40px; height: 1px; background: var(--gold); margin: 0.3rem 0;
+  }
+
+  /* HOME ABOUT */
+  .home-about {
+    background: var(--dark);
+    padding: 6rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+  }
+  .home-about-text .section-tag {
+    font-size: 0.6rem; letter-spacing: 5px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .home-about-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; line-height: 1.2;
+    color: var(--white); margin-bottom: 1.5rem;
+  }
+  .home-about-text p {
+    font-size: 0.8rem; color: rgba(245,240,232,0.65);
+    line-height: 1.9; letter-spacing: 0.5px; margin-bottom: 1rem;
+  }
+  .home-about-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .stat-item { border-left: 2px solid var(--gold); padding-left: 1.2rem; }
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 600; color: var(--gold);
+  }
+  .stat-label {
+    font-size: 0.65rem; letter-spacing: 2px; color: var(--gray);
+    text-transform: uppercase; margin-top: 0.2rem;
+  }
+
+  .home-facilities {
+    padding: 5rem 4rem;
+    background: var(--black);
+  }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-header .tag {
+    font-size: 0.6rem; letter-spacing: 5px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 0.8rem;
+  }
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 300; color: var(--white);
+  }
+  .gold-divider {
+    width: 60px; height: 1px; background: var(--gold);
+    margin: 1rem auto;
+  }
+  .facilities-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px; background: rgba(201,168,76,0.15);
+  }
+  .facility-card {
+    background: var(--dark); padding: 2.5rem 2rem;
+    text-align: center; transition: background 0.3s;
+  }
+  .facility-card:hover { background: var(--dark2); }
+  .facility-icon {
+    font-size: 2rem; margin-bottom: 1rem; color: var(--gold);
+  }
+  .facility-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .facility-card p {
+    font-size: 0.72rem; color: var(--gray); line-height: 1.7;
+  }
+
+  /* ===== GYM PAGE ===== */
+  #page-gym {}
+  .gym-hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center;
+    background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80');
+    background-size: cover; background-position: center top;
+    background-attachment: fixed;
+    overflow: hidden;
+  }
+  .gym-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, rgba(201,168,76,0.05) 100%);
+  }
+  .gym-hero::after {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  }
+  .gym-hero-content {
+    position: relative; z-index: 2;
+    padding: 0 5rem; max-width: 800px;
+  }
+  .page-tag {
+    display: inline-flex; align-items: center; gap: 1rem;
+    font-size: 0.6rem; letter-spacing: 5px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 1.5rem;
+  }
+  .page-tag::before {
+    content: ''; display: block;
+    width: 40px; height: 1px; background: var(--gold);
+  }
+  .gym-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 6rem; font-weight: 300; line-height: 0.95;
+    color: var(--white); margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+  .gym-hero h1 em {
+    font-style: italic; color: var(--gold);
+    display: block;
+  }
+  .gym-hero p {
+    font-size: 0.8rem; color: rgba(245,240,232,0.7);
+    line-height: 1.9; letter-spacing: 0.5px;
+    max-width: 480px; margin-bottom: 2.5rem;
+  }
+  .btn-gold {
+    background: var(--gold); color: var(--black);
+    border: none; padding: 0.9rem 2.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 0.8rem;
+  }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(245,240,232,0.4); padding: 0.9rem 2.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    margin-left: 1rem;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .gym-programs {
+    padding: 6rem 4rem; background: var(--dark);
+  }
+  .programs-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .program-card {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.12);
+    overflow: hidden; position: relative;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .program-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(201,168,76,0.4);
+  }
+  .program-card-img {
+    height: 200px;
+    background-size: cover; background-position: center;
+    position: relative;
+  }
+  .program-card-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+  }
+  .program-card-body { padding: 1.5rem; }
+  .program-tag {
+    font-size: 0.55rem; letter-spacing: 3px;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .program-card-body h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; color: var(--white); margin-bottom: 0.5rem;
+  }
+  .program-card-body p {
+    font-size: 0.72rem; color: var(--gray); line-height: 1.7;
+  }
+  .program-card-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .program-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; color: var(--gold);
+  }
+  .program-price span { font-size: 0.6rem; color: var(--gray); font-family: 'Montserrat', sans-serif; }
+
+  .gym-amenities {
+    padding: 5rem 4rem; background: var(--black);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .amenities-list { display: flex; flex-direction: column; gap: 1.2rem; }
+  .amenity-item {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 1.2rem 1.5rem;
+    background: var(--dark);
+    border-left: 3px solid var(--gold);
+    transition: background 0.3s;
+  }
+  .amenity-item:hover { background: var(--dark2); }
+  .amenity-icon { font-size: 1.3rem; color: var(--gold); flex-shrink: 0; }
+  .amenity-item h4 {
+    font-size: 0.85rem; color: var(--white); font-weight: 500;
+    margin-bottom: 0.2rem;
+  }
+  .amenity-item p { font-size: 0.7rem; color: var(--gray); }
+  .gym-amenities-text .section-tag {
+    font-size: 0.6rem; letter-spacing: 5px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .gym-amenities-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; color: var(--white);
+    line-height: 1.2; margin-bottom: 1.5rem;
+  }
+  .gym-amenities-text p {
+    font-size: 0.78rem; color: rgba(245,240,232,0.6);
+    line-height: 1.9; margin-bottom: 2rem;
+  }
+
+  /* ===== BILLIARD PAGE ===== */
+  #page-billiard {}
+  .billiard-hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center;
+    background-image: url('https://images.unsplash.com/photo-1625750331870-624de6fd3452?w=1600&q=80');
+    background-size: cover; background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+  }
+  .billiard-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.9) 40%, rgba(0,0,0,0.3) 100%);
+  }
+  .billiard-hero::after {
+    content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 4px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  }
+  .billiard-hero-content {
+    position: relative; z-index: 2;
+    padding: 0 5rem; max-width: 800px;
+  }
+  .billiard-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 6rem; font-weight: 300; line-height: 0.95;
+    color: var(--white); margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+  .billiard-hero h1 em { font-style: italic; color: var(--gold); display: block; }
+  .billiard-hero p {
+    font-size: 0.8rem; color: rgba(245,240,232,0.7);
+    line-height: 1.9; max-width: 480px; margin-bottom: 2.5rem;
+  }
+
+  /* BOOKING SECTION */
+  .booking-section {
+    padding: 6rem 4rem; background: var(--dark);
+  }
+  .booking-container {
+    display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem;
+  }
+  .booking-info .section-tag {
+    font-size: 0.6rem; letter-spacing: 5px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .booking-info h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 300; color: var(--white);
+    line-height: 1.2; margin-bottom: 1.5rem;
+  }
+  .booking-info p {
+    font-size: 0.78rem; color: rgba(245,240,232,0.6);
+    line-height: 1.9; margin-bottom: 1.5rem;
+  }
+  .table-legend { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
+  .legend-item { display: flex; align-items: center; gap: 0.8rem; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .legend-dot.available { background: var(--green); }
+  .legend-dot.booked { background: var(--red); }
+  .legend-dot.selected { background: var(--gold); }
+  .legend-label { font-size: 0.72rem; color: var(--gray); }
+
+  .booking-form-area {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 2rem;
+  }
+  .booking-step { margin-bottom: 2rem; }
+  .step-label {
+    display: flex; align-items: center; gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--gold); color: var(--black);
+    font-size: 0.65rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-label span {
+    font-size: 0.7rem; letter-spacing: 2px; color: var(--white);
+    text-transform: uppercase;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label {
+    display: block; font-size: 0.62rem; letter-spacing: 2px;
+    color: var(--gray); text-transform: uppercase; margin-bottom: 0.4rem;
+  }
+  .form-group input, .form-group select {
+    width: 100%; padding: 0.75rem 1rem;
+    background: var(--dark3); border: 1px solid rgba(201,168,76,0.2);
+    color: var(--white); font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem; outline: none;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--gold);
+  }
+  .form-group select option { background: var(--dark3); }
+
+  /* TIME GRID */
+  .time-grid-wrapper { margin-top: 0.5rem; }
+  .time-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+  .time-slot {
+    padding: 0.5rem 0.3rem; text-align: center;
+    font-size: 0.6rem; letter-spacing: 1px;
+    border: 1px solid rgba(201,168,76,0.2);
+    cursor: pointer; transition: all 0.2s;
+    color: var(--white2); background: var(--dark3);
+    user-select: none;
+  }
+  .time-slot:hover:not(.booked) { border-color: var(--gold); color: var(--gold); }
+  .time-slot.selected { background: var(--gold); color: var(--black); border-color: var(--gold); font-weight: 600; }
+  .time-slot.booked { background: rgba(192,57,43,0.15); border-color: rgba(192,57,43,0.3); color: #C0392B; cursor: not-allowed; }
+  .time-slot.booked:hover { border-color: rgba(192,57,43,0.3); color: #C0392B; }
+
+  /* TABLE GRID */
+  .table-grid-container { margin-top: 0.5rem; }
+  .table-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  }
+  .table-card {
+    padding: 0.8rem; text-align: center;
+    border: 1px solid rgba(201,168,76,0.2);
+    cursor: pointer; transition: all 0.2s;
+    background: var(--dark3);
+  }
+  .table-card:hover:not(.booked) { border-color: var(--gold); }
+  .table-card.selected { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+  .table-card.booked { border-color: rgba(192,57,43,0.3); cursor: not-allowed; background: rgba(192,57,43,0.05); }
+  .table-card .table-icon { font-size: 1.2rem; margin-bottom: 0.3rem; }
+  .table-card .table-num {
+    font-size: 0.6rem; letter-spacing: 2px;
+    color: var(--gray); text-transform: uppercase;
+  }
+  .table-card.selected .table-num { color: var(--gold); }
+  .table-card.booked .table-num { color: #C0392B; }
+
+  /* DURATION SELECTOR */
+  .duration-select {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.5rem;
+  }
+  .duration-card {
+    border: 1px solid rgba(201,168,76,0.2);
+    background: var(--dark3);
+    padding: 1rem 1.2rem;
+    cursor: pointer; transition: all 0.25s;
+    position: relative;
+  }
+  .duration-card:hover { border-color: var(--gold); }
+  .duration-card.selected {
+    background: rgba(201,168,76,0.1);
+    border-color: var(--gold);
+  }
+  .duration-card .dur-label {
+    font-size: 0.7rem; letter-spacing: 2px; color: var(--white);
+    text-transform: uppercase; font-weight: 600; margin-bottom: 0.3rem;
+  }
+  .duration-card .dur-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; color: var(--gold); line-height: 1;
+  }
+  .duration-card .dur-bonus {
+    font-size: 0.6rem; color: #4ade80; letter-spacing: 1px;
+    margin-top: 0.35rem; font-weight: 500;
+  }
+  .duration-card .dur-total {
+    font-size: 0.65rem; color: var(--gray); margin-top: 0.2rem;
+  }
+  .duration-card.selected .dur-label { color: var(--gold); }
+  .duration-card .check-badge {
+    position: absolute; top: 8px; right: 10px;
+    font-size: 0.9rem; display: none;
+  }
+  .duration-card.selected .check-badge { display: block; }
+
+  /* BOOKING SUMMARY */
+  .booking-summary {
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 1.2rem; margin-top: 1.5rem;
+    display: none;
+  }
+  .booking-summary.visible { display: block; }
+  .summary-title {
+    font-size: 0.6rem; letter-spacing: 3px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .summary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.4rem 0; border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-key { font-size: 0.65rem; color: var(--gray); }
+  .summary-val { font-size: 0.75rem; color: var(--white); font-weight: 500; }
+
+  .btn-book-confirm {
+    width: 100%; padding: 1rem; margin-top: 1.5rem;
+    background: var(--gold); color: var(--black); border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; font-weight: 600; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  }
+  .btn-book-confirm:hover { background: var(--gold-light); }
+  .btn-book-confirm:disabled { background: #444; color: #888; cursor: not-allowed; }
+
+  /* SUCCESS MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); z-index: 2000;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal-box {
+    background: var(--dark2); border: 1px solid var(--gold);
+    padding: 3rem; max-width: 480px; width: 90%;
+    text-align: center; animation: fadeInUp 0.4s ease;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .modal-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .modal-box p { font-size: 0.78rem; color: var(--gray); line-height: 1.7; margin-bottom: 1.5rem; }
+  .modal-detail {
+    background: var(--dark3); padding: 1.2rem;
+    border-left: 3px solid var(--gold); margin-bottom: 1.5rem; text-align: left;
+  }
+  .modal-detail p { font-size: 0.72rem; color: var(--white2); margin-bottom: 0.3rem; }
+  .modal-detail p strong { color: var(--gold); }
+
+  /* BILLIARD TABLES OVERVIEW */
+  .tables-overview {
+    padding: 5rem 4rem; background: var(--black);
+  }
+  .all-tables-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .table-overview-card {
+    background: var(--dark); padding: 2rem;
+    border: 1px solid rgba(201,168,76,0.12); text-align: center;
+    position: relative; overflow: hidden;
+    transition: all 0.3s;
+  }
+  .table-overview-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--gold);
+    transform: scaleX(0); transition: transform 0.3s;
+  }
+  .table-overview-card:hover::before { transform: scaleX(1); }
+  .table-overview-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-4px); }
+  .table-num-big {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+  .table-overview-card h4 {
+    font-size: 0.65rem; letter-spacing: 3px; color: var(--white2);
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .table-overview-card p {
+    font-size: 0.7rem; color: var(--gray); line-height: 1.6;
+  }
+  .table-type-badge {
+    display: inline-block; padding: 0.25rem 0.8rem;
+    border: 1px solid rgba(201,168,76,0.3); margin-top: 0.8rem;
+    font-size: 0.55rem; letter-spacing: 2px; color: var(--gold); text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding: 4rem 4rem 2rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+  .footer-brand .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--gold); letter-spacing: 3px;
+    margin-bottom: 1rem;
+  }
+  .footer-brand p {
+    font-size: 0.72rem; color: var(--gray); line-height: 1.8; max-width: 240px;
+  }
+  .footer-col h4 {
+    font-size: 0.6rem; letter-spacing: 4px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 1.2rem;
+  }
+  .footer-col a {
+    display: block; color: var(--gray); text-decoration: none;
+    font-size: 0.72rem; margin-bottom: 0.6rem; cursor: pointer;
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    padding-top: 2rem; border-top: 1px solid rgba(201,168,76,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { font-size: 0.65rem; color: var(--gray); }
+  .gold-text { color: var(--gold); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 3000;
+    background: var(--dark2); border: 1px solid var(--gold);
+    padding: 1rem 1.5rem; max-width: 300px;
+    animation: slideIn 0.3s ease; display: none;
+  }
+  .toast.visible { display: block; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .toast-title { font-size: 0.7rem; color: var(--gold); font-weight: 600; margin-bottom: 0.3rem; }
+  .toast-msg { font-size: 0.68rem; color: var(--gray); }
+
+  /* LOADING */
+  .loading-slots {
+    text-align: center; padding: 1rem; color: var(--gray);
+    font-size: 0.7rem; letter-spacing: 2px;
+  }
+
+  /* RESPONSIVE hints */
+  @media (max-width: 900px) {
+    .hero-split { grid-template-columns: 1fr; }
+    .hero-panel { min-height: 50vh; }
+    .hero-center-logo { display: none; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .home-about, .gym-amenities { grid-template-columns: 1fr; gap: 2.5rem; }
+    .booking-container { grid-template-columns: 1fr; }
+    .gym-hero h1, .billiard-hero h1 { font-size: 3.5rem; }
+    .gym-hero-content, .billiard-hero-content { padding: 0 2rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .programs-grid, .all-tables-grid { grid-template-columns: 1fr 1fr; }
+    .time-grid { grid-template-columns: repeat(4, 1fr); }
+    .home-about, .gym-amenities, .booking-section, .gym-programs, .tables-overview, .home-facilities { padding: 3rem 1.5rem; }
+    footer { padding: 3rem 1.5rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-logo" onclick="showPage('home')">JAZ<span> G&B</span></div>
+  <div class="nav-links">
+    <a onclick="showPage('home')" id="nav-home" class="active">Beranda</a>
+    <a onclick="showPage('gym')" id="nav-gym">Gym</a>
+    <a onclick="showPage('billiard')" id="nav-billiard">Billiard</a>
+    <a onclick="showPage('billiard'); setTimeout(()=>document.getElementById('booking').scrollIntoView({behavior:'smooth'}),100)" class="btn-book-nav">Booking</a>
+  </div>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="page-home" class="page active">
+  <div class="hero-split" style="position:relative;">
+    <div class="hero-center-divider"></div>
+    <div class="hero-center-logo">
+      <div class="hero-center-logo-inner">
+        <div class="main-title">JAZ</div>
+        <div class="divider-line"></div>
+        <div class="sub-title">Gym &amp; Billiard</div>
+      </div>
+    </div>
+    <div class="hero-panel hero-panel-gym" onclick="showPage('gym')">
+      <div class="hero-panel-content">
+        <div class="hero-panel-label">◆ Premium Fitness</div>
+        <h2 class="hero-panel-title">Elite<br>Gym</h2>
+        <p class="hero-panel-desc">Fasilitas gym kelas premium dengan peralatan terkini dan trainer berpengalaman.</p>
+        <button class="btn-enter" onclick="showPage('gym')">
+          Masuk Gym
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="hero-panel hero-panel-billiard" onclick="showPage('billiard')">
+      <div class="hero-panel-content">
+        <div class="hero-panel-label">◆ Luxury Billiard</div>
+        <h2 class="hero-panel-title">Premier<br>Billiard</h2>
+        <p class="hero-panel-desc">8 meja billiard profesional dengan atmosfer eksklusif dan sistem booking modern.</p>
+        <button class="btn-enter" onclick="showPage('billiard')">
+          Masuk Billiard
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="home-about">
+    <div class="home-about-text">
+      <div class="section-tag">◆ Tentang Kami</div>
+      <h2>Pengalaman Premium<br>Dalam Satu Lokasi</h2>
+      <p>JAZ Gym & Billiard menghadirkan konsep entertainment dan kebugaran eksklusif yang belum pernah ada sebelumnya. Dengan desain interior mewah dan fasilitas bertaraf internasional, kami memberikan pengalaman yang tak terlupakan.</p>
+      <p>Berlokasi strategis dan buka setiap hari, JAZ hadir untuk memenuhi kebutuhan gaya hidup aktif Anda dengan standar layanan tertinggi.</p>
+    </div>
+    <div class="home-about-stats">
+      <div class="stat-item">
+        <div class="stat-number">8</div>
+        <div class="stat-label">Meja Billiard</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">24</div>
+        <div class="stat-label">Jam Operasional</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Alat Gym Premium</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">7</div>
+        <div class="stat-label">Hari Seminggu</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="home-facilities">
+    <div class="section-header">
+      <div class="tag">◆ Fasilitas Unggulan</div>
+      <h2>Dirancang Untuk Yang Terbaik</h2>
+      <div class="gold-divider"></div>
+    </div>
+    <div class="facilities-grid">
+      <div class="facility-card">
+        <div class="facility-icon">🏋️</div>
+        <h3>Free Weight Zone</h3>
+        <p>Area barbel & dumbbell lengkap dari 2.5 kg hingga 50 kg dengan rak premium.</p>
+      </div>
+      <div class="facility-card">
+        <div class="facility-icon">🚴</div>
+        <h3>Cardio Area</h3>
+        <p>Treadmill, elliptical, dan sepeda statis berteknologi tinggi dengan layar digital.</p>
+      </div>
+      <div class="facility-card">
+        <div class="facility-icon">🧘</div>
+        <h3>Functional Zone</h3>
+        <p>Area latihan fungsional dengan TRX, battle rope, dan plyometric equipment.</p>
+      </div>
+      <div class="facility-card">
+        <div class="facility-icon">🎱</div>
+        <h3>Billiard Premium</h3>
+        <p>8 meja Brunswick billiard profesional dengan kain meja kualitas tournament.</p>
+      </div>
+      <div class="facility-card">
+        <div class="facility-icon">🚿</div>
+        <h3>Premium Locker</h3>
+        <p>Kamar mandi & loker eksklusif dengan amenities lengkap dan desain mewah.</p>
+      </div>
+      <div class="facility-card">
+        <div class="facility-icon">☕</div>
+        <h3>Lounge & Café</h3>
+        <p>Lounge eksklusif dengan minuman kesehatan dan cemilan premium post-workout.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer on Home -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">JAZ G&B</div>
+        <p>Premium fitness & entertainment destination. Memberikan pengalaman terbaik dalam gym dan billiard di kota ini.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigasi</h4>
+        <a onclick="showPage('home')">Beranda</a>
+        <a onclick="showPage('gym')">Gym</a>
+        <a onclick="showPage('billiard')">Billiard</a>
+        <a onclick="showPage('billiard'); setTimeout(()=>document.getElementById('booking').scrollIntoView({behavior:'smooth'}),100)">Booking</a>
+      </div>
+      <div class="footer-col">
+        <h4>Jam Buka</h4>
+        <a>Setiap Hari</a>
+        <a>06:00 – 23:00</a>
+        <a>Termasuk Hari Libur</a>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak</h4>
+        <a href="https://wa.me/6282114702010" target="_blank">📞 0821-1470-2010</a>
+        <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%20%26%20Billiard%2C%20saya%20ingin%20info%20lebih%20lanjut" target="_blank" style="color:var(--gold)">💬 WhatsApp Kami</a>
+        <a>📍 Jakarta Pusat</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 <span class="gold-text">JAZ Gym & Billiard</span>. All rights reserved.</p>
+      <p class="gold-text">◆ PREMIUM SINCE 2020</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ===== GYM PAGE ===== -->
+<div id="page-gym" class="page">
+  <div class="gym-hero">
+    <div class="gym-hero-content">
+      <div class="page-tag">JAZ Gym</div>
+      <h1>Train<br><em>Like A</em><br>Legend</h1>
+      <p>Raih batas kemampuanmu di gym premium kami. Peralatan kelas dunia, trainer bersertifikat internasional, dan atmosfer yang menginspirasi setiap sesi latihan.</p>
+      <div>
+        <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20daftar%20membership%20gym" target="_blank" class="btn-gold" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;">
+          💬 Daftar Membership
+        </a>
+        <button class="btn-outline" onclick="document.querySelector('.gym-programs').scrollIntoView({behavior:'smooth'})">Lihat Harga</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="gym-programs">
+    <div class="section-header">
+      <div class="tag">◆ Program Latihan</div>
+      <h2>Pilih Program Anda</h2>
+      <div class="gold-divider"></div>
+    </div>
+    <div class="programs-grid">
+      <!-- MEMBERSHIP CARD -->
+      <div class="program-card">
+        <div class="program-card-img" style="background-image:url('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&q=80')"></div>
+        <div class="program-card-body">
+          <div class="program-tag">◆ Member Bulanan</div>
+          <h3>Member Bulanan</h3>
+          <p>Akses penuh gym setiap hari selama 1 bulan. Nikmati semua fasilitas tanpa batas kunjungan — cocok untuk yang rutin latihan.</p>
+        </div>
+        <div class="program-card-footer">
+          <div class="program-price">Rp 100K <span>/ bulan</span></div>
+          <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20daftar%20Member%20Bulanan%20Rp%20100K" target="_blank" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;text-decoration:none;">Daftar</a>
+        </div>
+      </div>
+      <!-- VISIT CARD -->
+      <div class="program-card">
+        <div class="program-card-img" style="background-image:url('https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=600&q=80')"></div>
+        <div class="program-card-body">
+          <div class="program-tag">◆ Per Kunjungan</div>
+          <h3>Pay Per Visit</h3>
+          <p>Bayar sekali, latihan hari ini. Ideal untuk yang jadwal tidak tentu — tanpa komitmen bulanan, langsung bisa masuk dan mulai latihan.</p>
+        </div>
+        <div class="program-card-footer">
+          <div class="program-price">Rp 30K <span>/ kunjungan</span></div>
+          <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20masuk%20gym%20per%20kunjungan%20Rp%2030K" target="_blank" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;text-decoration:none;">Booking</a>
+        </div>
+      </div>
+      <!-- INFO CARD -->
+      <div class="program-card">
+        <div class="program-card-img" style="background-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80')"></div>
+        <div class="program-card-body">
+          <div class="program-tag">◆ Info Harga</div>
+          <h3>Pilih Paketmu</h3>
+          <p>Dua pilihan harga yang simpel dan terjangkau. Member bulanan hemat untuk latihan rutin. Per kunjungan fleksibel untuk jadwal bebas.</p>
+        </div>
+        <div class="program-card-footer">
+          <div class="program-price" style="font-size:0.85rem;line-height:1.5">
+            100K<span>/bln</span> &nbsp;·&nbsp; 30K<span>/visit</span>
+          </div>
+          <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20info%20lengkap%20paket%20gym" target="_blank" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;text-decoration:none;">Info</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gym-amenities">
+    <div class="amenities-list">
+      <div class="amenity-item">
+        <div class="amenity-icon">🏆</div>
+        <div>
+          <h4>Certified Personal Trainer</h4>
+          <p>Trainer bersertifikat internasional siap memandu setiap sesi latihan Anda</p>
+        </div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">📱</div>
+        <div>
+          <h4>App Workout Tracking</h4>
+          <p>Pantau progress latihan dan nutrisi langsung dari smartphone Anda</p>
+        </div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">🍎</div>
+        <div>
+          <h4>Nutrition Consultation</h4>
+          <p>Konsultasi nutrisi gratis dengan ahli gizi berlisensi setiap bulan</p>
+        </div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">🛁</div>
+        <div>
+          <h4>Premium Locker Room</h4>
+          <p>Fasilitas mandi & loker mewah dengan perlengkapan kebersihan premium</p>
+        </div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">⚡</div>
+        <div>
+          <h4>Recovery Zone</h4>
+          <p>Area pemulihan dengan foam roller, stretching zone, dan ice bath therapy</p>
+        </div>
+      </div>
+    </div>
+    <div class="gym-amenities-text">
+      <div class="section-tag">◆ Fasilitas Gym</div>
+      <h2>Semua Yang Anda<br>Butuhkan Ada Di Sini</h2>
+      <p>Kami percaya bahwa lingkungan yang tepat adalah kunci kesuksesan latihan. Setiap detail fasilitas JAZ Gym dirancang untuk mendukung perjalanan fitness Anda.</p>
+      <p>Dari peralatan terkini hingga tim support profesional, kami hadir untuk memastikan setiap kunjungan Anda memberikan hasil yang optimal.</p>
+      <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20mulai%20latihan%20sekarang" target="_blank" class="btn-gold" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;">💬 Mulai Sekarang</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">JAZ G&B</div>
+        <p>Premium fitness & entertainment destination. Memberikan pengalaman terbaik dalam gym dan billiard.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigasi</h4>
+        <a onclick="showPage('home')">Beranda</a>
+        <a onclick="showPage('gym')">Gym</a>
+        <a onclick="showPage('billiard')">Billiard</a>
+      </div>
+      <div class="footer-col">
+        <h4>Jam Buka</h4>
+        <a>Setiap Hari</a>
+        <a>06:00 – 23:00</a>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak</h4>
+        <a href="https://wa.me/6282114702010" target="_blank">📞 0821-1470-2010</a>
+        <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20info%20membership%20gym" target="_blank" style="color:var(--gold)">💬 WhatsApp Kami</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 <span class="gold-text">JAZ Gym & Billiard</span>. All rights reserved.</p>
+      <p class="gold-text">◆ PREMIUM SINCE 2020</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ===== BILLIARD PAGE ===== -->
+<div id="page-billiard" class="page">
+  <div class="billiard-hero">
+    <div class="billiard-hero-content">
+      <div class="page-tag">JAZ Billiard</div>
+      <h1>Master<br><em>The</em><br>Table</h1>
+      <p>8 meja billiard profesional Brunswick dengan kain tournament grade. Rasakan sensasi bermain di lingkungan eksklusif yang dirancang untuk para pecinta billiard sejati.</p>
+      <div>
+        <button class="btn-gold" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Booking Sekarang</button>
+        <button class="btn-outline" onclick="document.getElementById('tables-sec').scrollIntoView({behavior:'smooth'})">Lihat Meja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLES OVERVIEW -->
+  <div class="tables-overview" id="tables-sec">
+    <div class="section-header">
+      <div class="tag">◆ 8 Meja Premium</div>
+      <h2>Pilih Meja Terbaik Anda</h2>
+      <div class="gold-divider"></div>
+    </div>
+    <div class="all-tables-grid">
+      <div class="table-overview-card">
+        <div class="table-num-big">01</div>
+        <h4>Meja Standard</h4>
+        <p>Brunswick Gold Crown. Kain Simonis 760 Premium.</p>
+        <div class="table-type-badge">Standard · Rp 30K/jam</div>
+      </div>
+      <div class="table-overview-card">
+        <div class="table-num-big">02</div>
+        <h4>Meja Standard</h4>
+        <p>Brunswick Gold Crown. Kain Simonis 760 Premium.</p>
+        <div class="table-type-badge">Standard · Rp 30K/jam</div>
+      </div>
+      <div class="table-overview-card">
+        <div class="table-num-big">03</div>
+        <h4>Meja Standard</h4>
+        <p>Brunswick Centurion. Kain Simonis 760 Premium.</p>
+        <div class="table-type-badge">Standard · Rp 30K/jam</div>
+      </div>
+      <div class="table-overview-card">
+        <div class="table-num-big">04</div>
+        <h4>Meja Standard</h4>
+        <p>Brunswick Centurion. Kain Simonis 760 Premium.</p>
+        <div class="table-type-badge">Standard · Rp 30K/jam</div>
+      </div>
+      <div class="table-overview-card">
+        <div class="table-num-big">05</div>
+        <h4>Meja Standard</h4>
+        <p>Brunswick Centurion. Kain Simonis 760 Premium.</p>
+        <div class="table-type-badge">Standard · Rp 30K/jam</div>
+      </div>
+      <div class="table-overview-card">
+        <div class="table-num-big">06</div>
+        <h4>Meja Standard</h4>
+        <p>Brunswick Centurion. Kain Simonis 760 Premium.</p>
+        <div class="table-type-badge">Standard · Rp 30K/jam</div>
+      </div>
+      <div class="table-overview-card">
+        <div class="table-num-big">07</div>
+        <h4>Meja Standard</h4>
+        <p>Diamond Billiard Products. Kain Iwan Simonis.</p>
+        <div class="table-type-badge">Standard · Rp 30K/jam</div>
+      </div>
+      <div class="table-overview-card">
+        <div class="table-num-big">08</div>
+        <h4>Meja Standard</h4>
+        <p>Diamond Billiard Products. Kain Iwan Simonis.</p>
+        <div class="table-type-badge">Standard · Rp 30K/jam</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKING SECTION -->
+  <div class="booking-section" id="booking">
+    <div class="section-header">
+      <div class="tag">◆ Reservasi Online</div>
+      <h2>Booking Meja Billiard</h2>
+      <div class="gold-divider"></div>
+      <p style="color:var(--gray);font-size:0.75rem;margin-top:0.5rem;">Buka setiap hari · Rp 30K/jam + Bonus 30 mnt · 2 Jam + Bonus 1 jam</p>
+    </div>
+    <div class="booking-container" style="margin-top:3rem;">
+      <div class="booking-info">
+        <div class="section-tag">◆ Panduan Booking</div>
+        <h2>Pesan Meja<br>Anda Sekarang</h2>
+        <p>Pilih tanggal, meja, jam mulai, lalu pilih durasi sewa. Sistem kami mencegah double booking secara otomatis.</p>
+        <p>Tersedia dua pilihan durasi dengan <strong style="color:var(--gold)">bonus waktu gratis</strong>:</p>
+        <div class="table-legend">
+          <div class="legend-item">
+            <div class="legend-dot available"></div>
+            <div class="legend-label">Tersedia — dapat dipesan</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot booked"></div>
+            <div class="legend-label">Terpesan — tidak dapat dipesan</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot selected"></div>
+            <div class="legend-label">Dipilih — slot aktif Anda</div>
+          </div>
+        </div>
+        <div style="margin-top:2rem;padding:1.2rem;border:1px solid rgba(201,168,76,0.2);background:rgba(201,168,76,0.03);">
+          <p style="font-size:0.65rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem;">◆ Harga Billiard</p>
+          <p style="font-size:0.78rem;color:var(--white2);margin-bottom:0.5rem;">
+            🕐 <strong style="color:var(--gold)">1 Jam</strong> → Rp 30.000 <span style="color:var(--gold);font-size:0.7rem">+ bonus 30 menit</span>
+          </p>
+          <p style="font-size:0.78rem;color:var(--white2);margin-bottom:0.5rem;">
+            🕑 <strong style="color:var(--gold)">2 Jam</strong> → Rp 60.000 <span style="color:var(--gold);font-size:0.7rem">+ bonus 1 jam</span>
+          </p>
+          <p style="font-size:0.72rem;color:var(--gray);margin-top:0.8rem;line-height:1.6;">Berlaku untuk semua meja. Bonus waktu otomatis ditambahkan saat check-in.</p>
+        </div>
+      </div>
+
+      <div class="booking-form-area">
+        <!-- Step 1: Personal Info -->
+        <div class="booking-step">
+          <div class="step-label">
+            <div class="step-num">1</div>
+            <span>Data Pemesan</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nama Lengkap</label>
+              <input type="text" id="inp-name" placeholder="Masukkan nama Anda">
+            </div>
+            <div class="form-group">
+              <label>No. WhatsApp</label>
+              <input type="text" id="inp-phone" placeholder="08xxxxxxxxxx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Date -->
+        <div class="booking-step">
+          <div class="step-label">
+            <div class="step-num">2</div>
+            <span>Pilih Tanggal</span>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Kunjungan</label>
+            <input type="date" id="inp-date" onchange="onDateChange()">
+          </div>
+        </div>
+
+        <!-- Step 3: Table -->
+        <div class="booking-step">
+          <div class="step-label">
+            <div class="step-num">3</div>
+            <span>Pilih Meja</span>
+          </div>
+          <div class="table-grid-container">
+            <div class="table-grid" id="tableGrid">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Time -->
+        <div class="booking-step">
+          <div class="step-label">
+            <div class="step-num">4</div>
+            <span>Pilih Jam Mulai</span>
+          </div>
+          <div class="time-grid-wrapper">
+            <div class="time-grid" id="timeGrid">
+              <div class="loading-slots">Pilih tanggal &amp; meja terlebih dahulu</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Duration -->
+        <div class="booking-step" id="stepDuration" style="display:none;">
+          <div class="step-label">
+            <div class="step-num">5</div>
+            <span>Pilih Durasi</span>
+          </div>
+          <div class="duration-select">
+            <div class="duration-card" id="dur-1" onclick="selectDuration(1)">
+              <div class="check-badge">✅</div>
+              <div class="dur-label">1 Jam</div>
+              <div class="dur-price">Rp 30.000</div>
+              <div class="dur-bonus">🎁 + Bonus 30 menit gratis</div>
+              <div class="dur-total">Total main: 1,5 jam</div>
+            </div>
+            <div class="duration-card" id="dur-2" onclick="selectDuration(2)">
+              <div class="check-badge">✅</div>
+              <div class="dur-label">2 Jam</div>
+              <div class="dur-price">Rp 60.000</div>
+              <div class="dur-bonus">🎁 + Bonus 1 jam gratis</div>
+              <div class="dur-total">Total main: 3 jam</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="booking-summary" id="bookingSummary">
+          <div class="summary-title">◆ Ringkasan Booking</div>
+          <div class="summary-row">
+            <span class="summary-key">Pemesan</span>
+            <span class="summary-val" id="sum-name">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">No. WhatsApp</span>
+            <span class="summary-val" id="sum-phone">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Tanggal</span>
+            <span class="summary-val" id="sum-date">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Meja</span>
+            <span class="summary-val" id="sum-table">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Jam Mulai</span>
+            <span class="summary-val" id="sum-time">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Durasi</span>
+            <span class="summary-val" id="sum-duration">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Bonus Waktu</span>
+            <span class="summary-val" id="sum-bonus" style="color:#4ade80;">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Total Waktu Main</span>
+            <span class="summary-val" id="sum-totaltime">—</span>
+          </div>
+          <div class="summary-row" style="border-top:1px solid rgba(201,168,76,0.2);margin-top:0.5rem;padding-top:0.5rem;">
+            <span class="summary-key" style="color:var(--white);font-weight:600;">Total Bayar</span>
+            <span class="summary-val" id="sum-price" style="color:var(--gold);font-size:1.1rem;font-family:'Cormorant Garamond',serif;">—</span>
+          </div>
+        </div>
+
+        <button class="btn-book-confirm" id="btnConfirm" onclick="confirmBooking()" disabled>
+          ◆ Konfirmasi Booking
+        </button>
+        <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Billiard%2C%20saya%20ingin%20booking%20meja%20billiard" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-top:0.8rem;padding:0.75rem;border:1px solid rgba(37,211,102,0.4);color:#25D366;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-family:'Montserrat',sans-serif;transition:all 0.3s;"
+          onmouseover="this.style.background='rgba(37,211,102,0.08)'" onmouseout="this.style.background='transparent'">
+          💬 Atau Booking via WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">JAZ G&B</div>
+        <p>Premium fitness & entertainment destination. 8 meja billiard profesional siap melayani Anda.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigasi</h4>
+        <a onclick="showPage('home')">Beranda</a>
+        <a onclick="showPage('gym')">Gym</a>
+        <a onclick="showPage('billiard')">Billiard</a>
+      </div>
+      <div class="footer-col">
+        <h4>Jam Buka</h4>
+        <a>Setiap Hari</a>
+        <a>06:00 – 23:00</a>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak</h4>
+        <a href="https://wa.me/6282114702010" target="_blank">📞 0821-1470-2010</a>
+        <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Billiard%2C%20saya%20ingin%20booking%20meja" target="_blank" style="color:var(--gold)">💬 WhatsApp Kami</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 <span class="gold-text">JAZ Gym & Billiard</span>. All rights reserved.</p>
+      <p class="gold-text">◆ PREMIUM SINCE 2020</p>
+    </div>
+  </footer>
+</div>
+
+<!-- MODAL SUCCESS -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-icon">✅</div>
+    <h3>Booking Berhasil!</h3>
+    <p>Reservasi Anda telah dikonfirmasi. Harap tiba 10 menit sebelum waktu booking.</p>
+    <div class="modal-detail" id="modalDetail"></div>
+    <p style="font-size:0.7rem;color:var(--gray);margin-bottom:1.5rem;">Konfirmasi akan dikirim ke WhatsApp Anda dalam beberapa menit.</p>
+    <button class="btn-gold" style="width:100%" onclick="closeModal()">Tutup</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastEl">
+  <div class="toast-title" id="toastTitle"></div>
+  <div class="toast-msg" id="toastMsg"></div>
+</div>
+
+<!-- FLOATING WHATSAPP BUTTON -->
+<a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%20%26%20Billiard%2C%20saya%20ingin%20info%20lebih%20lanjut" target="_blank" id="waFloat" title="Chat WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="white" width="28" height="28"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.82.735 5.47 2.02 7.77L0 32l8.43-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.3a13.27 13.27 0 01-6.77-1.85l-.49-.29-5.01 1.19 1.22-4.88-.32-.5A13.27 13.27 0 1116 29.3zm7.29-9.93c-.4-.2-2.36-1.16-2.72-1.3-.37-.13-.63-.2-.9.2-.27.4-1.04 1.3-1.27 1.56-.23.27-.47.3-.87.1-.4-.2-1.69-.62-3.22-1.98-1.19-1.06-1.99-2.37-2.22-2.77-.23-.4-.02-.62.17-.82.18-.18.4-.47.6-.7.2-.23.27-.4.4-.67.13-.27.07-.5-.03-.7-.1-.2-.9-2.16-1.23-2.96-.32-.78-.65-.67-.9-.68-.23-.01-.5-.01-.76-.01-.27 0-.7.1-1.06.5-.37.4-1.4 1.37-1.4 3.33 0 1.96 1.43 3.86 1.63 4.13.2.27 2.82 4.3 6.83 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.11 2.36-.96 2.69-1.89.33-.93.33-1.72.23-1.89-.1-.17-.37-.27-.77-.47z"/></svg>
+</a>
+<style>
+  #waFloat {
+    position: fixed; bottom: 2rem; left: 2rem; z-index: 4000;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #25D366;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+    transition: all 0.3s; text-decoration: none;
+  }
+  #waFloat:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.7); }
+  #waFloat::after {
+    content: 'Chat Kami';
+    position: absolute; left: 66px; top: 50%; transform: translateY(-50%);
+    background: #111; color: #fff; font-size: 0.65rem;
+    letter-spacing: 1px; padding: 0.4rem 0.9rem; white-space: nowrap;
+    border: 1px solid rgba(201,168,76,0.3); pointer-events: none;
+    opacity: 0; transition: opacity 0.3s;
+    font-family: 'Montserrat', sans-serif;
+  }
+  #waFloat:hover::after { opacity: 1; }
+</style>
+
+<script>
+// =====================
+// STATE
+// =====================
+let selectedTable = null;
+let selectedTime = null;
+let selectedDuration = null;
+let currentDate = null;
+
+const TABLES = 8;
+const HOURS_START = 6;
+const HOURS_END = 23;
+
+const DURATION_CONFIG = {
+  1: { price: 30000, bonus: '+ 30 menit gratis', totalPlay: '1 jam 30 menit', label: '1 Jam' },
+  2: { price: 60000, bonus: '+ 1 jam gratis',    totalPlay: '3 jam',           label: '2 Jam' }
+};
+
+// =====================
+// GOOGLE SHEETS BACKEND
+// =====================
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdyUmt7feFRiPZdIU3i-MgSGLHj6I3GsafaixbmzH3eLLtC5UDij8_J4t4gTDqc7M/exec';
+
+// Cache bookings per date+table agar tidak fetch ulang terus
+const bookingCache = {};
+
+function getCacheKey(date, tableNum) {
+  return `${date}_${tableNum}`;
+}
+
+async function fetchBookingsFromSheet(date, tableNum) {
+  const key = getCacheKey(date, tableNum);
+  try {
+    const url = `${APPS_SCRIPT_URL}?action=getBookings&date=${date}&table=${tableNum}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    bookingCache[key] = data; // [ { time, duration }, ... ]
+    return data;
+  } catch(e) {
+    console.error('Fetch bookings error:', e);
+    return bookingCache[key] || [];
+  }
+}
+
+function getBookingsFromCache(date, tableNum) {
+  return bookingCache[getCacheKey(date, tableNum)] || [];
+}
+
+function isSlotBooked(date, tableNum, timeSlot) {
+  const bookings = getBookingsFromCache(date, tableNum);
+  const h = parseInt(timeSlot.split(':')[0]);
+  return bookings.some(b => {
+    const bStart = parseInt(b.time.split(':')[0]);
+    const bEnd   = bStart + parseInt(b.duration);
+    return h >= bStart && h < bEnd;
+  });
+}
+
+async function saveBookingToSheet(date, tableNum, timeSlot, duration, name, phone) {
+  const payload = {
+    action: 'saveBooking',
+    id: Date.now().toString(),
+    date, table: String(tableNum),
+    time: timeSlot, duration: String(duration),
+    name, phone
+  };
+  const res = await fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+  const result = await res.json();
+  return result; // { success: true } atau { success: false, reason: 'CONFLICT' }
+}
+
+// =====================
+// NAV
+// =====================
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  selectedTable = null;
+  selectedTime = null;
+  selectedDuration = null;
+}
+
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  if (window.scrollY > 50) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+
+// =====================
+// BOOKING LOGIC
+// =====================
+
+window.addEventListener('DOMContentLoaded', () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+  const dateInput = document.getElementById('inp-date');
+  dateInput.min = todayStr;
+  dateInput.value = todayStr;
+  currentDate = todayStr;
+  renderTableGrid();
+
+  document.getElementById('inp-name').addEventListener('input', updateSummary);
+  document.getElementById('inp-phone').addEventListener('input', updateSummary);
+});
+
+function onDateChange() {
+  currentDate = document.getElementById('inp-date').value;
+  selectedTable = null;
+  selectedTime = null;
+  selectedDuration = null;
+  renderTableGrid();
+  renderTimeGrid();
+  hideDurationStep();
+  updateSummary();
+}
+
+function renderTableGrid() {
+  const grid = document.getElementById('tableGrid');
+  grid.innerHTML = '';
+  for (let i = 1; i <= TABLES; i++) {
+    const div = document.createElement('div');
+    div.className = 'table-card';
+    div.id = 'tcard-' + i;
+    div.innerHTML = `
+      <div class="table-icon">🎱</div>
+      <div class="table-num">Meja ${String(i).padStart(2,'0')}<br>
+        <span style="font-size:0.5rem;color:var(--gold);letter-spacing:1px;">Standard</span>
+      </div>`;
+    div.onclick = () => selectTable(i);
+    grid.appendChild(div);
+  }
+}
+
+function selectTable(num) {
+  if (!currentDate) { showToast('⚠️ Pilih tanggal dulu', ''); return; }
+  selectedTable = num;
+  selectedTime = null;
+  selectedDuration = null;
+  document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('tcard-' + num).classList.add('selected');
+  renderTimeGrid();
+  hideDurationStep();
+  updateSummary();
+}
+
+async function renderTimeGrid() {
+  const grid = document.getElementById('timeGrid');
+  grid.innerHTML = '';
+  if (!selectedTable || !currentDate) {
+    grid.innerHTML = '<div class="loading-slots">Pilih tanggal &amp; meja terlebih dahulu</div>';
+    return;
+  }
+  grid.innerHTML = '<div class="loading-slots">&#9203; Memuat jadwal...</div>';
+  await fetchBookingsFromSheet(currentDate, selectedTable);
+  grid.innerHTML = '';
+  for (let h = HOURS_START; h < HOURS_END; h++) {
+    const slotKey   = `${String(h).padStart(2,'0')}:00`;
+    const slotEnd   = `${String(h+1).padStart(2,'0')}:00`;
+    const slotLabel = `${slotKey} \u2013 ${slotEnd}`;
+    const booked    = isSlotBooked(currentDate, selectedTable, slotKey);
+    const div = document.createElement('div');
+    div.className = 'time-slot' + (booked ? ' booked' : '');
+    div.textContent = slotKey;
+    div.title = slotLabel;
+    if (!booked) div.onclick = () => selectTime(slotKey, slotLabel, div);
+    grid.appendChild(div);
+  }
+}
+
+function selectTime(slotKey, slotLabel, el) {
+  selectedTime = { key: slotKey, label: slotLabel };
+  selectedDuration = null;
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  showDurationStep();
+  updateSummary();
+}
+
+function showDurationStep() {
+  const step = document.getElementById('stepDuration');
+  step.style.display = 'block';
+  // Reset duration cards
+  document.getElementById('dur-1').classList.remove('selected');
+  document.getElementById('dur-2').classList.remove('selected');
+}
+
+function hideDurationStep() {
+  const step = document.getElementById('stepDuration');
+  step.style.display = 'none';
+}
+
+function selectDuration(dur) {
+  selectedDuration = dur;
+  document.getElementById('dur-1').classList.remove('selected');
+  document.getElementById('dur-2').classList.remove('selected');
+  document.getElementById('dur-' + dur).classList.add('selected');
+  updateSummary();
+}
+
+function updateSummary() {
+  const name  = document.getElementById('inp-name').value.trim();
+  const phone = document.getElementById('inp-phone').value.trim();
+  const summary = document.getElementById('bookingSummary');
+  const btn   = document.getElementById('btnConfirm');
+
+  if (selectedTable && selectedTime && selectedDuration) {
+    const cfg = DURATION_CONFIG[selectedDuration];
+    summary.classList.add('visible');
+    document.getElementById('sum-name').textContent      = name  || '—';
+    document.getElementById('sum-phone').textContent     = phone || '—';
+    document.getElementById('sum-date').textContent      = formatDate(currentDate);
+    document.getElementById('sum-table').textContent     = `Meja ${String(selectedTable).padStart(2,'0')} — Standard`;
+    document.getElementById('sum-time').textContent      = selectedTime.label;
+    document.getElementById('sum-duration').textContent  = cfg.label;
+    document.getElementById('sum-bonus').textContent     = '🎁 ' + cfg.bonus;
+    document.getElementById('sum-totaltime').textContent = cfg.totalPlay;
+    document.getElementById('sum-price').textContent     = 'Rp ' + cfg.price.toLocaleString('id-ID');
+  } else {
+    summary.classList.remove('visible');
+  }
+
+  btn.disabled = !(selectedTable && selectedTime && selectedDuration && name);
+}
+
+async function confirmBooking() {
+  const name  = document.getElementById('inp-name').value.trim();
+  const phone = document.getElementById('inp-phone').value.trim();
+  if (!name)             { showToast('⚠️ Nama wajib diisi', ''); return; }
+  if (!currentDate)      { showToast('⚠️ Pilih tanggal', ''); return; }
+  if (!selectedTable)    { showToast('⚠️ Pilih meja', ''); return; }
+  if (!selectedTime)     { showToast('⚠️ Pilih jam', ''); return; }
+  if (!selectedDuration) { showToast('⚠️ Pilih durasi', ''); return; }
+
+  const btn = document.getElementById('btnConfirm');
+  btn.disabled = true;
+  btn.textContent = 'Memproses...';
+
+  let result;
+  try {
+    result = await saveBookingToSheet(currentDate, selectedTable, selectedTime.key, selectedDuration, name, phone);
+  } catch(e) {
+    showToast('❌ Gagal terhubung', 'Periksa koneksi internet Anda');
+    btn.disabled = false;
+    btn.textContent = 'Konfirmasi Booking';
+    return;
+  }
+
+  if (!result.success) {
+    showToast('❌ Slot sudah terpesan', 'Silakan pilih jam lain');
+    // Invalidate cache dan re-fetch
+    delete bookingCache[getCacheKey(currentDate, selectedTable)];
+    await renderTimeGrid();
+    btn.disabled = false;
+    btn.textContent = 'Konfirmasi Booking';
+    return;
+  }
+
+  // Update cache lokal agar UI langsung reflect
+  const cacheKey = getCacheKey(currentDate, selectedTable);
+  if (!bookingCache[cacheKey]) bookingCache[cacheKey] = [];
+  bookingCache[cacheKey].push({ time: selectedTime.key, duration: selectedDuration });
+
+  const cfg = DURATION_CONFIG[selectedDuration];
+
+  const details = `
+    <p><strong>Nama:</strong> ${name}</p>
+    <p><strong>WhatsApp:</strong> ${phone || '—'}</p>
+    <p><strong>Tanggal:</strong> ${formatDate(currentDate)}</p>
+    <p><strong>Meja:</strong> Meja ${String(selectedTable).padStart(2,'0')} — Standard</p>
+    <p><strong>Jam Mulai:</strong> ${selectedTime.label}</p>
+    <p><strong>Durasi:</strong> ${cfg.label}</p>
+    <p><strong>Bonus:</strong> <span style="color:#4ade80;font-weight:600;">${cfg.bonus}</span></p>
+    <p><strong>Total Waktu Main:</strong> ${cfg.totalPlay}</p>
+    <p><strong>Total Bayar:</strong> <span style="color:var(--gold);font-size:1.1rem;font-family:'Cormorant Garamond',serif;">Rp ${cfg.price.toLocaleString('id-ID')}</span></p>
+  `;
+  document.getElementById('modalDetail').innerHTML = details;
+  document.getElementById('modalOverlay').classList.add('visible');
+
+  // reset
+  selectedTime = null;
+  selectedTable = null;
+  selectedDuration = null;
+  document.getElementById('inp-name').value = '';
+  document.getElementById('inp-phone').value = '';
+  document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
+  renderTableGrid();
+  renderTimeGrid();
+  hideDurationStep();
+  document.getElementById('bookingSummary').classList.remove('visible');
+  const btnReset = document.getElementById('btnConfirm');
+  btnReset.disabled = true;
+  btnReset.textContent = 'Konfirmasi Booking';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('visible');
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr + 'T00:00:00');
+  const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function showToast(title, msg) {
+  const t = document.getElementById('toastEl');
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMsg').textContent   = msg;
+  t.classList.add('visible');
+  setTimeout(() => t.classList.remove('visible'), 3000);
+}
+</script>
+</body>
+</html>
