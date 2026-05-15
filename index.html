@@ -1435,7 +1435,8 @@ function isSlotBooked(date, tableNum, timeSlot) {
   const bookings = getBookingsFromCache(date, tableNum);
   const h = parseInt(timeSlot.split(':')[0]);
   return bookings.some(b => {
-    const bStart = parseInt(b.time.split(':')[0]);
+    // b.time bisa berupa angka string "6" atau format "06:00"
+    const bStart = parseInt(String(b.time).split(':')[0]);
     const bEnd   = bStart + parseInt(b.duration);
     return h >= bStart && h < bEnd;
   });
