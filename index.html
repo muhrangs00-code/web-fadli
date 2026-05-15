@@ -1499,6 +1499,8 @@ function onDateChange() {
   selectedTable = null;
   selectedTime = null;
   selectedDuration = null;
+  // Hapus semua cache saat tanggal berubah
+  Object.keys(bookingCache).forEach(k => delete bookingCache[k]);
   renderTableGrid();
   renderTimeGrid();
   hideDurationStep();
@@ -1527,6 +1529,8 @@ function selectTable(num) {
   selectedTable = num;
   selectedTime = null;
   selectedDuration = null;
+  // Hapus cache agar selalu fetch data terbaru dari Sheets
+  delete bookingCache[getCacheKey(currentDate, num)];
   document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('tcard-' + num).classList.add('selected');
   renderTimeGrid();
