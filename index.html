@@ -1379,23 +1379,50 @@ const DURATION_CONFIG = {
 // =====================
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdyUmt7feFRiPZdIU3i-MgSGLHj6I3GsafaixbmzH3eLLtC5UDij8_J4t4gTDqc7M/exec';
 
-// Cache bookings per date+table agar tidak fetch ulang terus
 const bookingCache = {};
+function getCacheKey(date, tableNum) { return `${date}_${tableNum}`; }
 
-function getCacheKey(date, tableNum) {
-  return `${date}_${tableNum}`;
+// JSONP helper — satu-satunya cara yang work untuk Apps Script cross-origin
+function jsonpRequest(params) {
+  return new Promise((resolve, reject) => {
+    const cbName = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+    const timeout = setTimeout(() => {
+      delete window[cbName];
+      const tag = document.getElementById(cbName);
+      if (tag) tag.remove();
+      reject(new Error('timeout'));
+    }, 10000);
+
+    window[cbName] = function(data) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      const tag = document.getElementById(cbName);
+      if (tag) tag.remove();
+      resolve(data);
+    };
+
+    const qs = new URLSearchParams({ ...params, callback: cbName }).toString();
+    const script = document.createElement('script');
+    script.id = cbName;
+    script.src = `${APPS_SCRIPT_URL}?${qs}`;
+    script.onerror = () => {
+      clearTimeout(timeout);
+      delete window[cbName];
+      script.remove();
+      reject(new Error('script error'));
+    };
+    document.head.appendChild(script);
+  });
 }
 
 async function fetchBookingsFromSheet(date, tableNum) {
   const key = getCacheKey(date, tableNum);
   try {
-    const url = `${APPS_SCRIPT_URL}?action=getBookings&date=${date}&table=${tableNum}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    bookingCache[key] = data; // [ { time, duration }, ... ]
-    return data;
+    const data = await jsonpRequest({ action: 'getBookings', date, table: String(tableNum) });
+    bookingCache[key] = Array.isArray(data) ? data : [];
+    return bookingCache[key];
   } catch(e) {
-    console.error('Fetch bookings error:', e);
+    console.error('fetchBookings error:', e);
     return bookingCache[key] || [];
   }
 }
@@ -1415,19 +1442,16 @@ function isSlotBooked(date, tableNum, timeSlot) {
 }
 
 async function saveBookingToSheet(date, tableNum, timeSlot, duration, name, phone) {
-  const params = new URLSearchParams({
+  return await jsonpRequest({
     action: 'saveBooking',
     id: Date.now().toString(),
     date,
     table: String(tableNum),
     time: timeSlot,
     duration: String(duration),
-    name,
-    phone
+    name: encodeURIComponent(name),
+    phone: encodeURIComponent(phone)
   });
-  const res = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`);
-  const result = await res.json();
-  return result;
 }
 
 // =====================
