@@ -1415,19 +1415,19 @@ function isSlotBooked(date, tableNum, timeSlot) {
 }
 
 async function saveBookingToSheet(date, tableNum, timeSlot, duration, name, phone) {
-  const payload = {
+  const params = new URLSearchParams({
     action: 'saveBooking',
     id: Date.now().toString(),
-    date, table: String(tableNum),
-    time: timeSlot, duration: String(duration),
-    name, phone
-  };
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify(payload)
+    date,
+    table: String(tableNum),
+    time: timeSlot,
+    duration: String(duration),
+    name,
+    phone
   });
+  const res = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`);
   const result = await res.json();
-  return result; // { success: true } atau { success: false, reason: 'CONFLICT' }
+  return result;
 }
 
 // =====================
