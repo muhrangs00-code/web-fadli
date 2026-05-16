@@ -1391,7 +1391,7 @@ function jsonpRequest(params) {
       const tag = document.getElementById(cbName);
       if (tag) tag.remove();
       reject(new Error('timeout'));
-    }, 15000);
+    }, 30000);
 
     window[cbName] = function(data) {
       clearTimeout(timeout);
@@ -1637,7 +1637,7 @@ async function confirmBooking() {
   try {
     result = await saveBookingToSheet(currentDate, selectedTable, selectedTime.key, selectedDuration, name, phone);
   } catch(e) {
-    showToast('❌ Gagal terhubung', 'Periksa koneksi internet Anda');
+    showToast('❌ Gagal terhubung', 'Coba lagi dalam beberapa detik');
     btn.disabled = false;
     btn.textContent = 'Konfirmasi Booking';
     return;
