@@ -1366,8 +1366,8 @@ let selectedDuration = null;
 let currentDate = null;
 
 const TABLES = 8;
-const HOURS_START = 6;
-const HOURS_END = 23;
+const HOURS_START = 10;
+const HOURS_END = 26;
 
 const DURATION_CONFIG = {
   1: { price: 30000, bonus: '+ 30 menit gratis', totalPlay: '1 jam 30 menit', label: '1 Jam' },
@@ -1382,16 +1382,16 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdyUmt7feFRiPZ
 const bookingCache = {};
 function getCacheKey(date, tableNum) { return `${date}_${tableNum}`; }
 
-// JSONP helper — satu-satunya cara yang work untuk Apps Script cross-origin
+// JSONP helper
 function jsonpRequest(params) {
   return new Promise((resolve, reject) => {
-    const cbName = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+    const cbName = 'cb_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
     const timeout = setTimeout(() => {
       delete window[cbName];
       const tag = document.getElementById(cbName);
       if (tag) tag.remove();
       reject(new Error('timeout'));
-    }, 10000);
+    }, 15000);
 
     window[cbName] = function(data) {
       clearTimeout(timeout);
@@ -1550,13 +1550,15 @@ async function renderTimeGrid() {
   await fetchBookingsFromSheet(currentDate, selectedTable);
   grid.innerHTML = '';
   for (let h = HOURS_START; h < HOURS_END; h++) {
-    const slotKey   = `${String(h).padStart(2,'0')}:00`;
-    const slotEnd   = `${String(h+1).padStart(2,'0')}:00`;
-    const slotLabel = `${slotKey} \u2013 ${slotEnd}`;
-    const booked    = isSlotBooked(currentDate, selectedTable, slotKey);
+    const displayH    = h >= 24 ? h - 24 : h;
+    const displayHEnd = (h + 1) >= 24 ? (h + 1) - 24 : (h + 1);
+    const slotKey     = `${String(h).padStart(2,'0')}:00`;
+    const slotEnd     = `${String(displayHEnd).padStart(2,'0')}:00`;
+    const slotLabel   = `${String(displayH).padStart(2,'0')}:00 \u2013 ${slotEnd}`;
+    const booked      = isSlotBooked(currentDate, selectedTable, slotKey);
     const div = document.createElement('div');
     div.className = 'time-slot' + (booked ? ' booked' : '');
-    div.textContent = slotKey;
+    div.textContent = `${String(displayH).padStart(2,'0')}:00`;
     div.title = slotLabel;
     if (!booked) div.onclick = () => selectTime(slotKey, slotLabel, div);
     grid.appendChild(div);
