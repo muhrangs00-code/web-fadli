@@ -1435,9 +1435,11 @@ function isSlotBooked(date, tableNum, timeSlot) {
   const bookings = getBookingsFromCache(date, tableNum);
   const h = parseInt(timeSlot.split(':')[0]);
   return bookings.some(b => {
-    // b.time bisa berupa angka string "6" atau format "06:00"
-    const bStart = parseInt(String(b.time).split(':')[0]);
-    const bEnd   = bStart + parseInt(b.duration);
+    const rawTime = String(b.time).trim();
+    const bStart = parseInt(rawTime.split(':')[0]);
+    const dur = parseInt(b.duration);
+    if (isNaN(bStart) || isNaN(dur)) return false;
+    const bEnd = bStart + dur;
     return h >= bStart && h < bEnd;
   });
 }
@@ -1635,8 +1637,11 @@ async function confirmBooking() {
 
   let result;
   try {
+    console.log('Mencoba saveBooking...', { currentDate, selectedTable, selectedTime, selectedDuration, name, phone });
     result = await saveBookingToSheet(currentDate, selectedTable, selectedTime.key, selectedDuration, name, phone);
+    console.log('saveBooking result:', result);
   } catch(e) {
+    console.error('saveBooking error:', e);
     showToast('❌ Gagal terhubung', 'Coba lagi dalam beberapa detik');
     btn.disabled = false;
     btn.textContent = 'Konfirmasi Booking';
@@ -1644,7 +1649,11 @@ async function confirmBooking() {
   }
 
   if (!result.success) {
-    showToast('❌ Slot sudah terpesan', 'Silakan pilih jam lain');
+    if (result.reason === 'busy') {
+      showToast('⏳ Server sibuk', 'Ada booking lain sedang diproses, coba lagi');
+    } else {
+      showToast('❌ Slot sudah terpesan', 'Silakan pilih jam lain');
+    }
     // Invalidate cache dan re-fetch
     delete bookingCache[getCacheKey(currentDate, selectedTable)];
     await renderTimeGrid();
