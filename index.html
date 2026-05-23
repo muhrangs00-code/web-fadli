@@ -900,9 +900,9 @@
       <h1>Train<br><em>Like A</em><br>Legend</h1>
       <p>Raih batas kemampuanmu di gym premium kami. Peralatan kelas dunia, trainer bersertifikat internasional, dan atmosfer yang menginspirasi setiap sesi latihan.</p>
       <div>
-        <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20daftar%20membership%20gym" target="_blank" class="btn-gold" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;">
-          💬 Daftar Membership
-        </a>
+        <button class="btn-gold" onclick="document.getElementById('gym-membership').scrollIntoView({behavior:'smooth'})">
+          🏋️ Daftar Membership
+        </button>
         <button class="btn-outline" onclick="document.querySelector('.gym-programs').scrollIntoView({behavior:'smooth'})">Lihat Harga</button>
       </div>
     </div>
@@ -925,7 +925,7 @@
         </div>
         <div class="program-card-footer">
           <div class="program-price">Rp 100K <span>/ bulan</span></div>
-          <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20daftar%20Member%20Bulanan%20Rp%20100K" target="_blank" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;text-decoration:none;">Daftar</a>
+          <a onclick="document.getElementById('gym-membership').scrollIntoView({behavior:'smooth'})" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;cursor:pointer;">Daftar</a>
         </div>
       </div>
       <!-- VISIT CARD -->
@@ -938,7 +938,7 @@
         </div>
         <div class="program-card-footer">
           <div class="program-price">Rp 30K <span>/ kunjungan</span></div>
-          <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20masuk%20gym%20per%20kunjungan%20Rp%2030K" target="_blank" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;text-decoration:none;">Booking</a>
+          <a onclick="document.getElementById('gym-membership').scrollIntoView({behavior:'smooth'})" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;cursor:pointer;">Booking</a>
         </div>
       </div>
       <!-- INFO CARD -->
@@ -953,7 +953,7 @@
           <div class="program-price" style="font-size:0.85rem;line-height:1.5">
             100K<span>/bln</span> &nbsp;·&nbsp; 30K<span>/visit</span>
           </div>
-          <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20info%20lengkap%20paket%20gym" target="_blank" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;text-decoration:none;">Info</a>
+          <a onclick="document.getElementById('gym-membership').scrollIntoView({behavior:'smooth'})" class="btn-gold" style="padding:0.4rem 1rem;font-size:0.55rem;cursor:pointer;">Info</a>
         </div>
       </div>
     </div>
@@ -1002,7 +1002,144 @@
       <h2>Semua Yang Anda<br>Butuhkan Ada Di Sini</h2>
       <p>Kami percaya bahwa lingkungan yang tepat adalah kunci kesuksesan latihan. Setiap detail fasilitas JAZ Gym dirancang untuk mendukung perjalanan fitness Anda.</p>
       <p>Dari peralatan terkini hingga tim support profesional, kami hadir untuk memastikan setiap kunjungan Anda memberikan hasil yang optimal.</p>
-      <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20mulai%20latihan%20sekarang" target="_blank" class="btn-gold" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;">💬 Mulai Sekarang</a>
+      <a onclick="document.getElementById('gym-membership').scrollIntoView({behavior:'smooth'})" class="btn-gold" style="cursor:pointer;display:inline-flex;align-items:center;gap:0.6rem;">🏋️ Daftar Sekarang</a>
+    </div>
+  </div>
+
+  <!-- GYM MEMBERSHIP FORM -->
+  <div class="booking-section" id="gym-membership" style="background:var(--dark);">
+    <div class="section-header">
+      <div class="tag">◆ Pendaftaran Online</div>
+      <h2>Daftar Membership Gym</h2>
+      <div class="gold-divider"></div>
+      <p style="color:var(--gray);font-size:0.75rem;margin-top:0.5rem;">Member Bulanan Rp 100K · Per Kunjungan Rp 30K · Data tersimpan otomatis</p>
+    </div>
+    <div class="booking-container" style="margin-top:3rem;">
+      <div class="booking-info">
+        <div class="section-tag">◆ Info Paket</div>
+        <h2>Pilih Paket<br>Yang Tepat</h2>
+        <p>Dua pilihan paket fleksibel untuk kebutuhan latihan Anda. Data pendaftaran langsung tersimpan ke sistem kami secara otomatis.</p>
+        <div style="margin-top:1.5rem;padding:1.2rem;border:1px solid rgba(201,168,76,0.2);background:rgba(201,168,76,0.03);">
+          <p style="font-size:0.65rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem;">◆ Paket Gym</p>
+          <p style="font-size:0.78rem;color:var(--white2);margin-bottom:0.8rem;">
+            🏋️ <strong style="color:var(--gold)">Member Bulanan</strong> — Rp 100.000<br>
+            <span style="font-size:0.7rem;color:var(--gray)">Akses penuh setiap hari selama 1 bulan</span>
+          </p>
+          <p style="font-size:0.78rem;color:var(--white2);margin-bottom:0.5rem;">
+            🎟️ <strong style="color:var(--gold)">Per Kunjungan</strong> — Rp 30.000<br>
+            <span style="font-size:0.7rem;color:var(--gray)">Bayar sekali, masuk hari ini. Tanpa komitmen.</span>
+          </p>
+        </div>
+        <div style="margin-top:1.5rem;padding:1rem 1.2rem;border:1px solid rgba(201,168,76,0.15);background:rgba(201,168,76,0.03);">
+          <p style="font-size:0.6rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem;">◆ Termasuk Fasilitas</p>
+          <p style="font-size:0.72rem;color:var(--gray);line-height:1.8;">✓ Free Weight & Cardio Zone<br>✓ Functional Training Area<br>✓ Premium Locker Room<br>✓ Air Conditioning 24 Jam<br>✓ WiFi Gratis</p>
+        </div>
+      </div>
+
+      <div class="booking-form-area">
+        <!-- Step 1 -->
+        <div class="booking-step">
+          <div class="step-label">
+            <div class="step-num">1</div>
+            <span>Data Diri</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nama Lengkap</label>
+              <input type="text" id="gym-name" placeholder="Nama lengkap Anda">
+            </div>
+            <div class="form-group">
+              <label>No. WhatsApp</label>
+              <input type="text" id="gym-phone" placeholder="08xxxxxxxxxx">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Lahir (Opsional)</label>
+            <input type="date" id="gym-dob">
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="booking-step">
+          <div class="step-label">
+            <div class="step-num">2</div>
+            <span>Pilih Paket</span>
+          </div>
+          <div class="duration-select">
+            <div class="duration-card" id="gym-pkg-monthly" onclick="selectGymPackage('monthly')">
+              <div class="check-badge">✅</div>
+              <div class="dur-label">Member Bulanan</div>
+              <div class="dur-price">Rp 100.000</div>
+              <div class="dur-bonus">🗓️ Akses penuh 1 bulan</div>
+              <div class="dur-total">Semua fasilitas gym</div>
+            </div>
+            <div class="duration-card" id="gym-pkg-visit" onclick="selectGymPackage('visit')">
+              <div class="check-badge">✅</div>
+              <div class="dur-label">Per Kunjungan</div>
+              <div class="dur-price">Rp 30.000</div>
+              <div class="dur-bonus">🎟️ Masuk 1 hari</div>
+              <div class="dur-total">Tanpa komitmen</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="booking-step">
+          <div class="step-label">
+            <div class="step-num">3</div>
+            <span>Tanggal Mulai</span>
+          </div>
+          <div class="form-group">
+            <label>Tanggal Mulai / Kunjungan</label>
+            <input type="date" id="gym-startdate" onchange="updateGymSummary()">
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="booking-summary" id="gymSummary">
+          <div class="summary-title">◆ Ringkasan Pendaftaran</div>
+          <div class="summary-row">
+            <span class="summary-key">Nama</span>
+            <span class="summary-val" id="gsum-name">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">WhatsApp</span>
+            <span class="summary-val" id="gsum-phone">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Paket</span>
+            <span class="summary-val" id="gsum-package">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Tanggal Mulai</span>
+            <span class="summary-val" id="gsum-date">—</span>
+          </div>
+          <div class="summary-row" style="border-top:1px solid rgba(201,168,76,0.2);margin-top:0.5rem;padding-top:0.5rem;">
+            <span class="summary-key" style="color:var(--white);font-weight:600;">Total Bayar</span>
+            <span class="summary-val" id="gsum-price" style="color:var(--gold);font-size:1.1rem;font-family:'Cormorant Garamond',serif;">—</span>
+          </div>
+        </div>
+
+        <button class="btn-book-confirm" id="btnGymConfirm" onclick="confirmGymMembership()" disabled>
+          ◆ Konfirmasi Pendaftaran
+        </button>
+        <a href="https://wa.me/6282114702010?text=Halo%20JAZ%20Gym%2C%20saya%20ingin%20info%20membership%20gym" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-top:0.8rem;padding:0.75rem;border:1px solid rgba(37,211,102,0.4);color:#25D366;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-family:'Montserrat',sans-serif;transition:all 0.3s;"
+          onmouseover="this.style.background='rgba(37,211,102,0.08)'" onmouseout="this.style.background='transparent'">
+          💬 Atau Tanya via WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GYM MODAL SUCCESS -->
+  <div class="modal-overlay" id="gymModalOverlay">
+    <div class="modal-box">
+      <div class="modal-icon">🏋️</div>
+      <h3>Pendaftaran Berhasil!</h3>
+      <p>Data membership Anda telah tersimpan. Tim kami akan menghubungi Anda via WhatsApp untuk konfirmasi pembayaran.</p>
+      <div class="modal-detail" id="gymModalDetail"></div>
+      <p style="font-size:0.7rem;color:var(--gray);margin-bottom:1.5rem;">Tunjukkan konfirmasi ini saat pertama kali datang ke gym.</p>
+      <button class="btn-gold" style="width:100%" onclick="closeGymModal()">Tutup</button>
     </div>
   </div>
 
@@ -1365,6 +1502,9 @@ let selectedTime = null;
 let selectedDuration = null;
 let currentDate = null;
 
+// GYM STATE
+let selectedGymPackage = null;
+
 const TABLES = 8;
 const HOURS_START = 10;
 const HOURS_END = 26;
@@ -1372,6 +1512,11 @@ const HOURS_END = 26;
 const DURATION_CONFIG = {
   1: { price: 30000, bonus: '+ 30 menit gratis', totalPlay: '1 jam 30 menit', label: '1 Jam' },
   2: { price: 60000, bonus: '+ 1 jam gratis',    totalPlay: '3 jam',           label: '2 Jam' }
+};
+
+const GYM_PACKAGE_CONFIG = {
+  monthly: { label: 'Member Bulanan', price: 100000 },
+  visit:   { label: 'Per Kunjungan',  price: 30000  }
 };
 
 // =====================
@@ -1417,6 +1562,7 @@ function jsonpRequest(params) {
 
 async function fetchBookingsFromSheet(date, tableNum) {
   const key = getCacheKey(date, tableNum);
+  // ALWAYS fetch fresh from sheet — no stale cache
   try {
     const data = await jsonpRequest({ action: 'getBookings', date, table: String(tableNum) });
     bookingCache[key] = Array.isArray(data) ? data : [];
@@ -1440,8 +1586,19 @@ function isSlotBooked(date, tableNum, timeSlot) {
     const dur = parseInt(b.duration);
     if (isNaN(bStart) || isNaN(dur)) return false;
     const bEnd = bStart + dur;
+    // Slot h is booked if it falls within [bStart, bEnd)
     return h >= bStart && h < bEnd;
   });
+}
+
+// Check if selecting a duration would overlap any booked slot
+function isDurationConflict(date, tableNum, startTimeSlot, duration) {
+  const startH = parseInt(startTimeSlot.split(':')[0]);
+  for (let i = 0; i < duration; i++) {
+    const checkSlot = `${String(startH + i).padStart(2,'0')}:00`;
+    if (isSlotBooked(date, tableNum, checkSlot)) return true;
+  }
+  return false;
 }
 
 async function saveBookingToSheet(date, tableNum, timeSlot, duration, name, phone) {
@@ -1454,6 +1611,21 @@ async function saveBookingToSheet(date, tableNum, timeSlot, duration, name, phon
     duration: String(duration),
     name: encodeURIComponent(name),
     phone: encodeURIComponent(phone)
+  });
+}
+
+// =====================
+// GYM MEMBERSHIP BACKEND
+// =====================
+async function saveGymMembershipToSheet(name, phone, dob, packageType, startDate) {
+  return await jsonpRequest({
+    action: 'saveGymMembership',
+    id: 'GYM_' + Date.now().toString(),
+    name: encodeURIComponent(name),
+    phone: encodeURIComponent(phone),
+    dob: encodeURIComponent(dob || ''),
+    package: encodeURIComponent(packageType),
+    startDate: encodeURIComponent(startDate)
   });
 }
 
@@ -1495,6 +1667,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('inp-name').addEventListener('input', updateSummary);
   document.getElementById('inp-phone').addEventListener('input', updateSummary);
+
+  // Gym date min
+  const gymDate = document.getElementById('gym-startdate');
+  gymDate.min = todayStr;
+  gymDate.value = todayStr;
+  document.getElementById('gym-name').addEventListener('input', updateGymSummary);
+  document.getElementById('gym-phone').addEventListener('input', updateGymSummary);
 });
 
 function onDateChange() {
@@ -1502,7 +1681,7 @@ function onDateChange() {
   selectedTable = null;
   selectedTime = null;
   selectedDuration = null;
-  // Hapus semua cache saat tanggal berubah
+  // Clear ALL cache when date changes
   Object.keys(bookingCache).forEach(k => delete bookingCache[k]);
   renderTableGrid();
   renderTimeGrid();
@@ -1532,7 +1711,7 @@ function selectTable(num) {
   selectedTable = num;
   selectedTime = null;
   selectedDuration = null;
-  // Hapus cache agar selalu fetch data terbaru dari Sheets
+  // Always delete cache so we fetch fresh data from Sheets
   delete bookingCache[getCacheKey(currentDate, num)];
   document.querySelectorAll('.table-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('tcard-' + num).classList.add('selected');
@@ -1549,7 +1728,10 @@ async function renderTimeGrid() {
     return;
   }
   grid.innerHTML = '<div class="loading-slots">&#9203; Memuat jadwal...</div>';
+
+  // ALWAYS fetch fresh from server — this is the key fix for double booking
   await fetchBookingsFromSheet(currentDate, selectedTable);
+
   grid.innerHTML = '';
   for (let h = HOURS_START; h < HOURS_END; h++) {
     const displayH    = h >= 24 ? h - 24 : h;
@@ -1579,17 +1761,49 @@ function selectTime(slotKey, slotLabel, el) {
 function showDurationStep() {
   const step = document.getElementById('stepDuration');
   step.style.display = 'block';
-  // Reset duration cards
   document.getElementById('dur-1').classList.remove('selected');
   document.getElementById('dur-2').classList.remove('selected');
+
+  // Re-check duration availability based on current cache
+  const dur1 = document.getElementById('dur-1');
+  const dur2 = document.getElementById('dur-2');
+  if (selectedTime && selectedTable && currentDate) {
+    // Check if 1-hour selection would conflict (slot+1)
+    const conflict1 = isDurationConflict(currentDate, selectedTable, selectedTime.key, 1);
+    const conflict2 = isDurationConflict(currentDate, selectedTable, selectedTime.key, 2);
+    if (conflict1) {
+      dur1.style.opacity = '0.4';
+      dur1.style.cursor = 'not-allowed';
+      dur1.onclick = () => showToast('⚠️ Slot 1 jam tidak tersedia', 'Jam berikutnya sudah terpesan');
+    } else {
+      dur1.style.opacity = '1';
+      dur1.style.cursor = 'pointer';
+      dur1.onclick = () => selectDuration(1);
+    }
+    if (conflict2) {
+      dur2.style.opacity = '0.4';
+      dur2.style.cursor = 'not-allowed';
+      dur2.onclick = () => showToast('⚠️ Slot 2 jam tidak tersedia', 'Salah satu jam berikutnya sudah terpesan');
+    } else {
+      dur2.style.opacity = '1';
+      dur2.style.cursor = 'pointer';
+      dur2.onclick = () => selectDuration(2);
+    }
+  }
 }
 
 function hideDurationStep() {
-  const step = document.getElementById('stepDuration');
-  step.style.display = 'none';
+  document.getElementById('stepDuration').style.display = 'none';
 }
 
 function selectDuration(dur) {
+  // Re-validate before allowing selection
+  if (selectedTime && selectedTable && currentDate) {
+    if (isDurationConflict(currentDate, selectedTable, selectedTime.key, dur)) {
+      showToast('⚠️ Tidak tersedia', 'Durasi ini bentrok dengan booking yang sudah ada');
+      return;
+    }
+  }
   selectedDuration = dur;
   document.getElementById('dur-1').classList.remove('selected');
   document.getElementById('dur-2').classList.remove('selected');
@@ -1635,11 +1849,23 @@ async function confirmBooking() {
   btn.disabled = true;
   btn.textContent = 'Memproses...';
 
+  // Re-fetch before submit to catch race conditions
+  await fetchBookingsFromSheet(currentDate, selectedTable);
+  if (isDurationConflict(currentDate, selectedTable, selectedTime.key, selectedDuration)) {
+    showToast('❌ Slot sudah terpesan', 'Jadwal baru saja diambil orang lain, silakan pilih jam lain');
+    await renderTimeGrid();
+    selectedTime = null;
+    selectedDuration = null;
+    hideDurationStep();
+    updateSummary();
+    btn.disabled = false;
+    btn.textContent = 'Konfirmasi Booking';
+    return;
+  }
+
   let result;
   try {
-    console.log('Mencoba saveBooking...', { currentDate, selectedTable, selectedTime, selectedDuration, name, phone });
     result = await saveBookingToSheet(currentDate, selectedTable, selectedTime.key, selectedDuration, name, phone);
-    console.log('saveBooking result:', result);
   } catch(e) {
     console.error('saveBooking error:', e);
     showToast('❌ Gagal terhubung', 'Coba lagi dalam beberapa detik');
@@ -1652,23 +1878,26 @@ async function confirmBooking() {
     if (result.reason === 'busy') {
       showToast('⏳ Server sibuk', 'Ada booking lain sedang diproses, coba lagi');
     } else {
-      showToast('❌ Slot sudah terpesan', 'Silakan pilih jam lain');
+      showToast('❌ Slot sudah terpesan', 'Jadwal diambil detik terakhir, silakan pilih jam lain');
     }
-    // Invalidate cache dan re-fetch
+    // Force fresh fetch and re-render
     delete bookingCache[getCacheKey(currentDate, selectedTable)];
     await renderTimeGrid();
+    selectedTime = null;
+    selectedDuration = null;
+    hideDurationStep();
+    updateSummary();
     btn.disabled = false;
     btn.textContent = 'Konfirmasi Booking';
     return;
   }
 
-  // Update cache lokal agar UI langsung reflect
+  // Update local cache immediately
   const cacheKey = getCacheKey(currentDate, selectedTable);
   if (!bookingCache[cacheKey]) bookingCache[cacheKey] = [];
   bookingCache[cacheKey].push({ time: selectedTime.key, duration: selectedDuration });
 
   const cfg = DURATION_CONFIG[selectedDuration];
-
   const details = `
     <p><strong>Nama:</strong> ${name}</p>
     <p><strong>WhatsApp:</strong> ${phone || '—'}</p>
@@ -1683,7 +1912,6 @@ async function confirmBooking() {
   document.getElementById('modalDetail').innerHTML = details;
   document.getElementById('modalOverlay').classList.add('visible');
 
-  // reset
   selectedTime = null;
   selectedTable = null;
   selectedDuration = null;
@@ -1703,6 +1931,101 @@ function closeModal() {
   document.getElementById('modalOverlay').classList.remove('visible');
 }
 
+// =====================
+// GYM MEMBERSHIP LOGIC
+// =====================
+function selectGymPackage(pkg) {
+  selectedGymPackage = pkg;
+  document.getElementById('gym-pkg-monthly').classList.remove('selected');
+  document.getElementById('gym-pkg-visit').classList.remove('selected');
+  document.getElementById('gym-pkg-' + pkg).classList.add('selected');
+  updateGymSummary();
+}
+
+function updateGymSummary() {
+  const name      = document.getElementById('gym-name').value.trim();
+  const phone     = document.getElementById('gym-phone').value.trim();
+  const startDate = document.getElementById('gym-startdate').value;
+  const summary   = document.getElementById('gymSummary');
+  const btn       = document.getElementById('btnGymConfirm');
+
+  if (name && selectedGymPackage && startDate) {
+    const cfg = GYM_PACKAGE_CONFIG[selectedGymPackage];
+    summary.classList.add('visible');
+    document.getElementById('gsum-name').textContent    = name;
+    document.getElementById('gsum-phone').textContent   = phone || '—';
+    document.getElementById('gsum-package').textContent = cfg.label;
+    document.getElementById('gsum-date').textContent    = formatDate(startDate);
+    document.getElementById('gsum-price').textContent   = 'Rp ' + cfg.price.toLocaleString('id-ID');
+  } else {
+    summary.classList.remove('visible');
+  }
+
+  btn.disabled = !(name && selectedGymPackage && startDate);
+}
+
+async function confirmGymMembership() {
+  const name      = document.getElementById('gym-name').value.trim();
+  const phone     = document.getElementById('gym-phone').value.trim();
+  const dob       = document.getElementById('gym-dob').value;
+  const startDate = document.getElementById('gym-startdate').value;
+
+  if (!name)             { showToast('⚠️ Nama wajib diisi', ''); return; }
+  if (!selectedGymPackage) { showToast('⚠️ Pilih paket gym', ''); return; }
+  if (!startDate)        { showToast('⚠️ Pilih tanggal mulai', ''); return; }
+
+  const btn = document.getElementById('btnGymConfirm');
+  btn.disabled = true;
+  btn.textContent = 'Mendaftarkan...';
+
+  let result;
+  try {
+    result = await saveGymMembershipToSheet(name, phone, dob, selectedGymPackage, startDate);
+  } catch(e) {
+    console.error('saveGymMembership error:', e);
+    showToast('❌ Gagal terhubung', 'Coba lagi dalam beberapa detik');
+    btn.disabled = false;
+    btn.textContent = 'Konfirmasi Pendaftaran';
+    return;
+  }
+
+  if (!result || !result.success) {
+    showToast('❌ Gagal menyimpan', result?.reason || 'Coba lagi');
+    btn.disabled = false;
+    btn.textContent = 'Konfirmasi Pendaftaran';
+    return;
+  }
+
+  const cfg = GYM_PACKAGE_CONFIG[selectedGymPackage];
+  const details = `
+    <p><strong>Nama:</strong> ${name}</p>
+    <p><strong>WhatsApp:</strong> ${phone || '—'}</p>
+    <p><strong>Paket:</strong> ${cfg.label}</p>
+    <p><strong>Tanggal Mulai:</strong> ${formatDate(startDate)}</p>
+    <p><strong>Total Bayar:</strong> <span style="color:var(--gold);font-size:1.1rem;font-family:'Cormorant Garamond',serif;">Rp ${cfg.price.toLocaleString('id-ID')}</span></p>
+  `;
+  document.getElementById('gymModalDetail').innerHTML = details;
+  document.getElementById('gymModalOverlay').classList.add('visible');
+
+  // Reset
+  document.getElementById('gym-name').value = '';
+  document.getElementById('gym-phone').value = '';
+  document.getElementById('gym-dob').value = '';
+  selectedGymPackage = null;
+  document.getElementById('gym-pkg-monthly').classList.remove('selected');
+  document.getElementById('gym-pkg-visit').classList.remove('selected');
+  document.getElementById('gymSummary').classList.remove('visible');
+  btn.disabled = true;
+  btn.textContent = 'Konfirmasi Pendaftaran';
+}
+
+function closeGymModal() {
+  document.getElementById('gymModalOverlay').classList.remove('visible');
+}
+
+// =====================
+// UTILS
+// =====================
 function formatDate(dateStr) {
   if (!dateStr) return '—';
   const d = new Date(dateStr + 'T00:00:00');
