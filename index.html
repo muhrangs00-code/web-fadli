@@ -1562,13 +1562,15 @@ function jsonpRequest(params) {
 
 async function fetchBookingsFromSheet(date, tableNum) {
   const key = getCacheKey(date, tableNum);
-  // ALWAYS fetch fresh from sheet — no stale cache
   try {
+    console.log('[FETCH] mulai getBookings date=' + date + ' table=' + tableNum);
     const data = await jsonpRequest({ action: 'getBookings', date, table: String(tableNum) });
+    console.log('[FETCH] hasil dari server:', JSON.stringify(data));
     bookingCache[key] = Array.isArray(data) ? data : [];
+    console.log('[FETCH] cache disimpan:', JSON.stringify(bookingCache[key]));
     return bookingCache[key];
   } catch(e) {
-    console.error('fetchBookings error:', e);
+    console.error('[FETCH] ERROR:', e);
     return bookingCache[key] || [];
   }
 }
@@ -1580,13 +1582,17 @@ function getBookingsFromCache(date, tableNum) {
 function isSlotBooked(date, tableNum, timeSlot) {
   const bookings = getBookingsFromCache(date, tableNum);
   const h = parseInt(timeSlot.split(':')[0]);
+  // Cek apakah jam h ter-cover oleh booking manapun
   return bookings.some(b => {
-    const rawTime = String(b.time).trim();
-    const bStart = parseInt(rawTime.split(':')[0]);
-    const dur = parseInt(b.duration);
-    if (isNaN(bStart) || isNaN(dur)) return false;
+    // Support format integer (11) atau string ("11:00") dari server
+    let bStart;
+    if (typeof b.time === 'number') {
+      bStart = b.time;
+    } else {
+      bStart = parseInt(String(b.time).split(':')[0]);
+    }
+    const dur  = parseInt(b.duration) || 1;
     const bEnd = bStart + dur;
-    // Slot h is booked if it falls within [bStart, bEnd)
     return h >= bStart && h < bEnd;
   });
 }
